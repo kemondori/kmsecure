@@ -1,4 +1,4 @@
-COMMANDS:
+**COMMANDS:**
 
 -c CRYPT WITH THE GIVEN KEY | -d DECRYPT WITH THE GIVEN KEY **[required]**
 
@@ -23,3 +23,17 @@ example hard crypt:
 
 example hard decrypt:
 -d my_key -r path -i [similar_filename_to_ignore]
+
+**DISTRIBUTIONS**
+
+https://github.com/kemondori/kmsecure/releases
+
+**SUPPORT**
+- Tested on Windows
+
+**ROADMAP**
+- Test on Linux
+- Add multithreading
+
+
+The repository has a .pro file (project of QtCreator) but doesn't require any Qt library.
