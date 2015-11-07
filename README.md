@@ -1,9 +1,15 @@
+COMMANDS:
 
--s SOFT MODE | -h HARD MODE [optional - default to hard]
--c CRYPT WITH THE GIVEN KEY | -d DECRYPT WITH THE GIVEN KEY [required]
+-c CRYPT WITH THE GIVEN KEY | -d DECRYPT WITH THE GIVEN KEY **[required]**
+
+-s SOFT MODE | -h HARD MODE **[optional - default to hard]**
+
+-r DIRECTORY TO CRYPT (all subdirectories will be handled too) **[required]**
+
 -l LOCATION FOR SOFT MODE (mid point of the crypting, range 0-100. common value is 50) [required for soft mode]
--p PERCENTUAL OF CRYPTING FOR SOFT MODE (smaller is faster, range 0-100. common value is 20) [required for soft mode]
--r DIRECTORY TO CRYPT (all subdirectories will be handled too) [required]
+
+-p PERCENTAGE OF CRYPTING FOR SOFT MODE (smaller is faster, range 0-100. common value is 20) [required for soft mode]
+
 -i IF A FILENAME CONTAINS THIS STRING IT WILL BE IGNORED (useful for extensions) [optional]
 
 example soft crypt:
