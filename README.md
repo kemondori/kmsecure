@@ -24,7 +24,7 @@ example hard crypt:
 example hard decrypt:
 -d my_key -r path
 
-You can crypt n-times on the same files. Just be sure to call decrypt with the same n-times.
+You can crypt n-times the same files. Just be sure to call decrypt with the same n-times.
 
 **DISTRIBUTIONS**
 
