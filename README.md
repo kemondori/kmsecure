@@ -13,16 +13,18 @@
 -i IF A FILENAME CONTAINS THIS STRING IT WILL BE IGNORED (useful for extensions) [optional]
 
 example soft crypt:
--s -c my_key -r path -i [similar_filename_to_ignore] -l 50 -p 20
+-s -c my_key -r path -i similar_filename_to_ignore -l 50 -p 20
 
 example soft decrypt:
--s -d my_key -r path -i [similar_filename_to_ignore] -l 50 -p 20
+-s -d my_key -r path -i similar_filename_to_ignore -l 50 -p 20
 
 example hard crypt:
--c my_key -r path -i [similar_filename_to_ignore]
+-c my_key -r path -i similar_filename_to_ignore
 
 example hard decrypt:
--d my_key -r path -i [similar_filename_to_ignore]
+-d my_key -r path -i similar_filename_to_ignore
+
+You can crypt n-times on the same files. Just be sure to call decrypt with the same n-times.
 
 **DISTRIBUTIONS**
 
