@@ -22,7 +22,7 @@ example hard crypt:
 -c my_key -r path -i similar_filename_to_ignore
 
 example hard decrypt:
--d my_key -r path -i similar_filename_to_ignore
+-d my_key -r path
 
 You can crypt n-times on the same files. Just be sure to call decrypt with the same n-times.
 
