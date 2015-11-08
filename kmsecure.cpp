@@ -1,3 +1,9 @@
+/*
+ * KMSECURE
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Matteo Fumagalli
+*/
+
 #include "kmsecure.h"
 
 using namespace std;
@@ -39,6 +45,7 @@ kmsecure::kmsecure_error kmsecure::crypt(char** buffer, int size, kmsecure::kmse
     ash.soft_point = info.soft_point;
     ash.soft_perc = info.soft_perc;
     ash.size_buf = size;
+    ash.version = 0;
 
     len8 = get_len8_dim(size);
     if(!info.hard)

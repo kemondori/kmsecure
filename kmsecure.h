@@ -1,3 +1,9 @@
+/*
+ * KMSECURE
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Matteo Fumagalli
+*/
+
 #ifndef KMSECURE_H
 #define KMSECURE_H
 
@@ -34,6 +40,8 @@ public:
         char soft_point;
         char soft_perc;
         unsigned int size_buf;
+        int version;
+        char reserved[40];
     }kmsecure_header;
 
     kmsecure();
