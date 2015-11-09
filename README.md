@@ -32,9 +32,9 @@ https://github.com/kemondori/kmsecure/releases
 
 **SUPPORT**
 - Tested on Windows
+- Tested on Linux
 
 **ROADMAP**
-- Test on Linux
 - Add multithreading
 
 
