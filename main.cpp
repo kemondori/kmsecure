@@ -8,7 +8,7 @@
 
 using namespace std;
 const char* version = "0.1";
-bool crypt = false;
+bool to_crypt = false;
 char algoritmo = 1;
 char* key = NULL;
 char* directory = NULL;
@@ -32,11 +32,11 @@ int main (int argc, char **argv)
                 printf("version %s\n",version);
                 return 0;
             case 'c':
-                crypt = true;
+                to_crypt = true;
                 key = optarg;
                 break;
             case 'd':
-                crypt = false;
+                to_crypt = false;
                 key = optarg;
                 break;
             case 'h':
@@ -146,7 +146,7 @@ void explore(char* str_dir)
                 buffer = new char[size];
                 in_file.read(buffer,size);
                 in_file.close();
-                if(crypt)
+                if(to_crypt)
                     kms.crypt(&buffer,size,info,size);
                 else
                     kms.decrypt(&buffer,size,size);
