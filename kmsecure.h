@@ -39,8 +39,8 @@ public:
         char hard;
         char soft_point;
         char soft_perc;
-        unsigned int size_buf;
-        int version;
+        uint32_t size_buf;
+        uint32_t version;
         char reserved[40];
     }kmsecure_header;
 

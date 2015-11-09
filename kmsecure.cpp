@@ -170,7 +170,7 @@ void kmsecure::set_key(const char *key)
     this->key = (char*)key;
     if(blowfish != NULL)
         delete blowfish;
-    std::vector<char> v_key(key,key + (strlen(key) + 1));
+    std::vector<char> v_key(key,key + (strlen(key)));
     blowfish = new Blowfish(v_key);
 }
 
