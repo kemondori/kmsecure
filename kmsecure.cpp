@@ -18,7 +18,7 @@ int kmsecure::get_len8_dim(int size)
 {
     int len8;
     int padding_length = size % sizeof(uint64_t);
-    if (padding_length == 0) {  //don't know why blowfish do this even if 0, just getting along...
+    if (padding_length == 0) {
       padding_length = sizeof(uint64_t);
     } else {
       padding_length = sizeof(uint64_t) - padding_length;
@@ -27,12 +27,13 @@ int kmsecure::get_len8_dim(int size)
     return len8;
 }
 
-kmsecure::kmsecure_error kmsecure::crypt(char** buffer, int size, kmsecure::kmsecure_info &info, int &new_size)
+kmsecure::kmsecure_error kmsecure::crypt(char** buffer, int &size, kmsecure::kmsecure_info &info)
 {
     kmsecure_header ash;
     int hoff = sizeof(kmsecure_header);
     int len8;
     char* buffer_dest;
+    int oldsize;
     int px1,px2,tmpsize,tmpsize8;
 
     if(key == NULL)
@@ -55,19 +56,20 @@ kmsecure::kmsecure_error kmsecure::crypt(char** buffer, int size, kmsecure::kmse
         if(tmpsize > 0)
         {
             tmpsize8 = get_len8_dim(tmpsize);
-            new_size = hoff + size + (tmpsize8 - tmpsize);
-            buffer_dest = new char[new_size];
+            oldsize = size;
+            size = hoff + size + (tmpsize8 - tmpsize);
+            buffer_dest = new char[size];
             memcpy(buffer_dest,&ash,hoff);
             std::vector<char> buffer_crypted((*buffer + px1),(*buffer + px1) + tmpsize);
             buffer_crypted = blowfish->Encrypt(buffer_crypted);
             char* c_buffer = reinterpret_cast<char*>(buffer_crypted.data());
             memcpy((buffer_dest + hoff + px1),c_buffer,buffer_crypted.size());
             memcpy(buffer_dest + hoff,*buffer,px1);
-            memcpy((buffer_dest + hoff + px1) + buffer_crypted.size() ,*buffer + px2,size - px2);
+            memcpy((buffer_dest + hoff + px1) + buffer_crypted.size() ,*buffer + px2,oldsize - px2);
         }
         else
         {
-            new_size = size;
+            size = size;
             return KMS_NO_ERROR_NO_CRYPT;
         }
 
@@ -81,7 +83,7 @@ kmsecure::kmsecure_error kmsecure::crypt(char** buffer, int size, kmsecure::kmse
         buffer_crypted = blowfish->Encrypt(buffer_crypted);
         char* c_buffer = reinterpret_cast<char*>(buffer_crypted.data());
         memcpy(buffer_dest + hoff,c_buffer,buffer_crypted.size());
-        new_size = len8 + hoff;
+        size = len8 + hoff;
     }
 
     delete *buffer;
@@ -90,7 +92,7 @@ kmsecure::kmsecure_error kmsecure::crypt(char** buffer, int size, kmsecure::kmse
     return KMS_NO_ERROR;
 }
 
-kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int size, int &new_size)
+kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int &size)
 {
     bool cryptato = false;
     int len8;
@@ -129,7 +131,7 @@ kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int size, int &new_siz
     {
         calc_soft_points(ash.soft_point,ash.soft_perc,ash.size_buf,&px1,&px2);
         tmpsize = px2 - px1;
-        new_size = ash.size_buf;
+        size = ash.size_buf;
         if(tmpsize > 0)
         {
             tmpsize8 = get_len8_dim(tmpsize);
@@ -154,7 +156,7 @@ kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int size, int &new_siz
         buffer_crypt = blowfish->Decrypt(buffer_crypt);
         char* c_buffer = reinterpret_cast<char*>(buffer_crypt.data());
         memcpy(buffer_dest,c_buffer,buffer_crypt.size());
-        new_size = ash.size_buf;
+        size = ash.size_buf;
     }
 
     delete *buffer;

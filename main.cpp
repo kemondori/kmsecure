@@ -147,9 +147,9 @@ void explore(char* str_dir)
                 in_file.read(buffer,size);
                 in_file.close();
                 if(to_crypt)
-                    kms.crypt(&buffer,size,info,size);
+                    kms.crypt(&buffer,size,info);
                 else
-                    kms.decrypt(&buffer,size,size);
+                    kms.decrypt(&buffer,size);
                 out_file.open(file.path,ios::binary);
                 out_file.write(buffer,size);
                 out_file.close();

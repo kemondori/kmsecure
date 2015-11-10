@@ -45,8 +45,8 @@ public:
     }kmsecure_header;
 
     kmsecure();
-    kmsecure_error crypt(char** buffer, int size, kmsecure_info &info, int &new_size);
-    kmsecure_error decrypt(char** buffer, int size, int &new_size);
+    kmsecure_error crypt(char** buffer, int &size, kmsecure_info &info);
+    kmsecure_error decrypt(char** buffer,int &size);
 
     void set_key(const char* key);
     void calc_soft_points(int soft_point, int soft_perc,int len,int* px1,int* px2);
