@@ -102,12 +102,6 @@ kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int &size)
     int hoff = sizeof(kmsecure_header);
     kmsecure_header ash;
 
-    if(key == NULL)
-    {
-        printf("\nMUST INITIALIZE KMSECURE WITH SETKEY\n");
-        return KMSERROR;
-    }
-
     total_file_size = size;
 
     if(total_file_size > sizeof(kmsecure_header))
@@ -122,7 +116,21 @@ kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int &size)
         cryptato = false;
 
     if(cryptato == false)
+    {
+        decrypt_last_error = KMS_NO_ERROR_NO_CRYPT;
         return KMS_NO_ERROR_NO_CRYPT;
+    }
+
+    if(key == NULL)
+    {
+        printf("\nMUST INITIALIZE KMSECURE WITH SETKEY\n");
+        decrypt_last_error = KMSERROR;
+        return KMSERROR;
+    }
+
+    decrypt_last_info.hard = ash.hard;
+    decrypt_last_info.soft_perc = ash.soft_perc;
+    decrypt_last_info.soft_point = ash.soft_point;
 
     buffer_dest = new char[ash.size_buf];
     memset(buffer_dest,0,ash.size_buf);
@@ -144,6 +152,7 @@ kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int &size)
         }
         else
         {
+            decrypt_last_error = KMS_NO_ERROR;
             return KMS_NO_ERROR;
         }
 
@@ -163,7 +172,7 @@ kmsecure::kmsecure_error kmsecure::decrypt(char** buffer, int &size)
     *buffer = buffer_dest;
 
 
-
+    decrypt_last_error = KMS_NO_ERROR;
     return KMS_NO_ERROR;
 }
 
@@ -207,5 +216,15 @@ void kmsecure::calc_soft_points(int soft_point, int soft_perc, int len, int *px1
         printf("file too small to handle this soft crypt");
         exit(-99);
     }
+}
+
+kmsecure::kmsecure_info kmsecure::get_last_decrypted_info()
+{
+    return decrypt_last_info;
+}
+
+kmsecure::kmsecure_error kmsecure::get_last_decrypted_error()
+{
+    return decrypt_last_error;
 }
 

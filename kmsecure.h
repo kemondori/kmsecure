@@ -15,8 +15,8 @@
 #include <vector>
 #include "blowfish.h"
 
-static const char* CRYPT_HEADER_CODE = "?|938ìçd%_KMS_";
-static const int CRYPT_HEADER_CODE_SIZE = 16;
+#define CRYPT_HEADER_CODE "?|938ìçd%_KMS_"
+#define CRYPT_HEADER_CODE_SIZE 16
 
 class kmsecure {
 
@@ -51,13 +51,15 @@ public:
     void set_key(const char* key);
     void calc_soft_points(int soft_point, int soft_perc,int len,int* px1,int* px2);
 
+    kmsecure_info get_last_decrypted_info();
+    kmsecure_error get_last_decrypted_error();
+
 
 protected:
     char* key;
     Blowfish* blowfish;
-
-    kmsecure_info decrypted_info;
-    kmsecure_error decrypt_last_result;
+    kmsecure_info decrypt_last_info;
+    kmsecure_error decrypt_last_error;
 
 private:
     int get_len8_dim(int size);
