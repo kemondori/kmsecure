@@ -32,6 +32,11 @@ You can crypt n-times the same files. Just be sure to call decrypt with the same
 
 https://github.com/kemondori/kmsecure/releases
 
+**FRAMEWORK SAMPLE**
+
+[Starling](https://github.com/kemondori/kmsecure_starling)
+
+
 **SUPPORT**
 - Tested on Windows
 - Tested on Linux
