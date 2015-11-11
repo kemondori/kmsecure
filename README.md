@@ -1,3 +1,5 @@
+**Be careful, before using this make a copy of your files.**
+
 **COMMANDS:**
 
 -c CRYPT WITH THE GIVEN KEY | -d DECRYPT WITH THE GIVEN KEY **[required]**
