@@ -6,7 +6,7 @@
 
 -s SOFT MODE | -h HARD MODE **[optional - default to hard]**
 
--r DIRECTORY TO CRYPT (all subdirectories will be handled too) **[required]**
+-r **DIRECTORY** TO CRYPT (all subdirectories will be handled too, you can't input a single file) **[required]**
 
 -l LOCATION FOR SOFT MODE (mid point of the crypting, range 0-100. common value is 50) [required for soft mode]
 
