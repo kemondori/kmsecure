@@ -246,11 +246,11 @@ size_t PKCS5PaddingLength(const std::vector<char> &data) {
 
 }; // anonymous namespace
 
-Blowfish::Blowfish(const std::vector<char> &key) {
-  SetKey(key.data(), key.size());
+Blowfish::Blowfish() {
+
 }
 
-void Blowfish::SetKey(const char *key, size_t byte_length) {
+void Blowfish::set_key(const char *key, size_t byte_length) {
   std::memcpy(pary_, initial_pary, sizeof(initial_pary));
   std::memcpy(sbox_, initial_sbox, sizeof(initial_sbox));
 
@@ -299,9 +299,9 @@ void Blowfish::SetKey(const char *key, size_t byte_length) {
   }
 }
 
-std::vector<char> Blowfish::Encrypt(const std::vector<char> &src) const {
+std::vector<char> Blowfish::encrypt(const std::vector<char> &src) {
   std::vector<char> dst = src;
-
+#if 0
   size_t padding_length = dst.size() % sizeof(uint64_t);
   if (padding_length == 0) {
     padding_length = sizeof(uint64_t);
@@ -312,7 +312,7 @@ std::vector<char> Blowfish::Encrypt(const std::vector<char> &src) const {
   for (size_t i = 0; i < padding_length; ++i) {
     dst.push_back(static_cast<char>(padding_length));
   }
-
+#endif
   for (int i = 0; i < dst.size() / sizeof(uint64_t); ++i) {
     uint32_t *left = &reinterpret_cast<uint32_t *>(dst.data())[i * 2];
     uint32_t *right = &reinterpret_cast<uint32_t *>(dst.data())[i * 2 + 1];
@@ -322,7 +322,7 @@ std::vector<char> Blowfish::Encrypt(const std::vector<char> &src) const {
   return dst;
 }
 
-std::vector<char> Blowfish::Decrypt(const std::vector<char> &src) const {
+std::vector<char> Blowfish::decrypt(const std::vector<char> &src) {
   std::vector<char> dst = src;
 
   for (int i = 0; i < dst.size() / sizeof(uint64_t); ++i) {
@@ -330,10 +330,17 @@ std::vector<char> Blowfish::Decrypt(const std::vector<char> &src) const {
     uint32_t *right = &reinterpret_cast<uint32_t *>(dst.data())[i * 2 + 1];
     DecryptBlock(left, right);
   }
-
+#if 0
+  //we already provide a padded buffer
   size_t padding_length = PKCS5PaddingLength(dst);
   dst.resize(dst.size() - padding_length);
+#endif
   return dst;
+}
+
+uint16_t Blowfish::get_minimum_block_size()
+{
+    return 8;
 }
 
 void Blowfish::EncryptBlock(uint32_t *left, uint32_t *right) const {

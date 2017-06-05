@@ -5,16 +5,17 @@
 #include <unistd.h>
 #include "tinydir.h"
 #include "kmsecure.h"
+#include "aes.h"
 
 using namespace std;
-const char* version = "0.1";
 bool to_crypt = false;
-char algoritmo = 1;
+char algorithm[20] = {0};
 char* key = NULL;
 char* directory = NULL;
 std::vector<char*> ext_to_ignore;
 kmsecure kms;
 kmsecure::kmsecure_info info;
+ikmcrypto* kmcrypto;
 
 void explore(char*);
 
@@ -29,7 +30,7 @@ int main (int argc, char **argv)
         switch (c)
         {
             case 'v':
-                printf("version %s\n",version);
+                printf("version %d.%d\n",KMS_VERSION/10,KMS_VERSION % 10);
                 return 0;
             case 'c':
                 to_crypt = true;
@@ -74,7 +75,8 @@ int main (int argc, char **argv)
                 }
                 break;
             case 'a':
-                algoritmo = atoi(optarg);
+                strncpy(algorithm,optarg,20);
+                break;
             case '?':
                 if (optopt == 'c' || optopt == 'd' || optopt == 'r' || optopt == 'p' || optopt == 'l'
                          || optopt == 'a' || optopt == 'i')
@@ -101,7 +103,23 @@ int main (int argc, char **argv)
         return -4;
     }
 
-    kms.set_key(key);
+    if(algorithm[0] == 0)
+        kmcrypto = new Blowfish();
+    else if(strncmp(algorithm,"Blowfish",20) == 0)
+        kmcrypto = new Blowfish();
+    else if(strncmp(algorithm,"AES128",20) == 0)
+        kmcrypto = new AES128();
+    else if(strncmp(algorithm,"AES256",20) == 0)
+        kmcrypto = new AES256();
+    else
+    {
+        printf("No valid algorithm provided");
+        return -5;
+    }
+
+    kmcrypto->set_key(key,strlen(key));
+
+    kms.set_crypto(kmcrypto);
     explore(directory);
 
     return 0;
@@ -159,7 +177,7 @@ void explore(char* str_dir)
                     out_file.write(buffer,size);
                     out_file.close();
 
-                    delete buffer;
+                    delete[] buffer;
                 }
             }
 

@@ -14,6 +14,8 @@
 
 -i IF A FILENAME CONTAINS THIS STRING IT WILL BE IGNORED (useful for extensions) [optional]
 
+-a ALGORITHM (AES256, AES128, Blowfish) [optional, Blowfish if not provided]
+
 example soft crypt:
 -s -c my_key -r path -i similar_filename_to_ignore -l 50 -p 20
 

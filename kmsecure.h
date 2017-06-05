@@ -13,8 +13,10 @@
 #include <fstream>
 #include <string.h>
 #include <vector>
+#include "ikmcrypto.h"
 #include "blowfish.h"
 
+#define KMS_VERSION 2
 #define CRYPT_HEADER_CODE "?|938ìçd%_KMS_"
 #define CRYPT_HEADER_CODE_SIZE 16
 
@@ -48,7 +50,7 @@ public:
     kmsecure_error crypt(char** buffer, int &size, kmsecure_info &info);
     kmsecure_error decrypt(char** buffer,int &size);
 
-    void set_key(const char* key);
+    void set_crypto(ikmcrypto* kmcrypto);
     void calc_soft_points(int soft_point, int soft_perc,int len,int* px1,int* px2);
 
     kmsecure_info get_last_decrypted_info();
@@ -56,13 +58,12 @@ public:
 
 
 protected:
-    char* key;
-    Blowfish* blowfish;
+    ikmcrypto* kmcrypto;
     kmsecure_info decrypt_last_info;
     kmsecure_error decrypt_last_error;
 
 private:
-    int get_len8_dim(int size);
+    int get_len_padded_dim(int size);
 };
 
 

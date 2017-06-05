@@ -14,15 +14,17 @@
 #include <stdint.h>
 #include <cstddef>
 #include <vector>
+#include "ikmcrypto.h"
 
-class Blowfish {
+class Blowfish: public ikmcrypto {
 public:
-  Blowfish(const std::vector<char> &key);
-  std::vector<char> Encrypt(const std::vector<char> &src) const;
-  std::vector<char> Decrypt(const std::vector<char> &src) const;
+  Blowfish();
+  std::vector<char> encrypt(const std::vector<char> &src);
+  std::vector<char> decrypt(const std::vector<char> &src);
+  void set_key(const char *key, size_t byte_length);
+  uint16_t get_minimum_block_size();
 
 private:
-  void SetKey(const char *key, size_t byte_length);
   void EncryptBlock(uint32_t *left, uint32_t *right) const;
   void DecryptBlock(uint32_t *left, uint32_t *right) const;
   uint32_t Feistel(uint32_t value) const;
